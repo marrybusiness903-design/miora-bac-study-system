@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#4A6FA5">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Miora BAC Study System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F8F9FA; --card-bg: #FFFFFF; --text: #212529; --text-muted: #6C757D;
+    --border: #E9ECEF; --primary: #4A6FA5; --primary-light: #EBF1F5;
+    --accent: #FF7E5F; --success: #2EC4B6; --warning: #FFBF00; --danger: #E63946;
+    --q1-bg: #FFE5E5; --q1-border: #FFA8A8; --q2-bg: #E3F2FD; --q2-border: #90CAF9;
+    --q3-bg: #FFF3E0; --q3-border: #FFCC80; --q4-bg: #F5F5F5; --q4-border: #E0E0E0;
+    --shadow: 0 4px 12px rgba(0,0,0,0.05); --radius: 12px;
+  }
+  [data-theme="dark"] {
+    --bg: #121212; --card-bg: #1E1E1E; --text: #E0E0E0; --text-muted: #A0A0A0;
+    --border: #2C2C2C; --primary: #6C92C8; --primary-light: #1A2634;
+    --q1-bg: #3C1E1E; --q1-border: #6B2D2D; --q2-bg: #1E2D3C; --q2-border: #2D4A6B;
+    --q3-bg: #3C301E; --q3-border: #6B522D; --q4-bg: #2A2A2A; --q4-border: #3A3A3A;
+    --shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', 'Segoe UI', Tahoma, Arial, sans-serif; }
+  body { background-color: var(--bg); color: var(--text); padding-bottom: 70px; transition: background-color 0.3s, color 0.3s; }
+  header { background: var(--card-bg); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+  .brand { font-weight: 700; font-size: 1.2rem; color: var(--primary); display: flex; align-items: center; gap: 8px; flex-shrink:0; }
+  .nav-desktop { display: flex; gap: 6px; overflow-x: auto; padding: 5px 0; }
+  .nav-btn { background: none; border: none; padding: 8px 12px; border-radius: 8px; color: var(--text-muted); cursor: pointer; font-size: 0.88rem; font-weight: 500; white-space: nowrap; transition: all .2s; }
+  .nav-btn:hover { background: var(--primary-light); color: var(--primary); }
+  .nav-btn.active { background: var(--primary); color: #fff; }
+  .theme-toggle { background: none; border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; cursor: pointer; color: var(--text); flex-shrink:0; }
+  .nav-mobile { position: fixed; bottom: 0; right: 0; left: 0; background: var(--card-bg); border-top: 1px solid var(--border); display: flex; justify-content: space-around; padding: 8px 0; z-index: 100; overflow-x:auto; }
+  .nav-mobile .nav-btn { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; gap: 2px; padding:6px 8px; }
+  .nav-badge { background: var(--danger); color:#fff; border-radius:10px; padding:1px 6px; font-size:.68rem; margin-inline-start:4px; display:none; }
+  .nav-badge.show { display:inline-block; }
+  main { max-width: 1200px; margin: 20px auto; padding: 0 15px; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .card { background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .card h2 { font-size: 1.15rem; }
+  .row-between { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+  .grid-7 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+
+  .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+  @media (max-width: 768px) { .matrix { grid-template-columns: 1fr; } .nav-desktop { display: none; } }
+  @media (min-width: 769px) { .nav-mobile { display: none; } }
+
+  .q-box { border-radius: var(--radius); padding: 15px; border: 1px solid; min-height: 160px; transition: box-shadow .15s, transform .15s; }
+  .q1 { background: var(--q1-bg); border-color: var(--q1-border); }
+  .q2 { background: var(--q2-bg); border-color: var(--q2-border); }
+  .q3 { background: var(--q3-bg); border-color: var(--q3-border); }
+  .q4 { background: var(--q4-bg); border-color: var(--q4-border); }
+  .q-box.drag-over { box-shadow: 0 0 0 2px var(--primary); }
+  .q-box h3 { font-size: .95rem; margin-bottom: 6px; }
+  .q-hint { font-size: .75rem; color: var(--text-muted); margin-bottom:6px; }
+
+  .task-item {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 10px; margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap:8px;
+    cursor: grab;
+  }
+  .task-item.dragging { opacity: .4; }
+  .task-item .name { overflow-wrap:anywhere; }
+  .btn { background: var(--primary); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size:.9rem; }
+  .btn.sm { padding: 4px 8px; font-size: 0.8rem; }
+  .btn.danger { background: var(--danger); }
+  .btn.outline { background:transparent; border:1px solid var(--border); color:var(--text); }
+  .btn.success { background: var(--success); }
+
+  .sr-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid var(--border); gap:10px; flex-wrap:wrap; }
+  .sr-item:last-child { border-bottom:none; }
+  .sr-badge { font-size:.75rem; padding:3px 8px; border-radius:10px; background:var(--primary-light); color:var(--primary); }
+  .sr-badge.due { background:#FDE7E7; color:var(--danger); }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 200; padding:15px; }
+  .modal-overlay.hidden { display: none; }
+  .modal { background: var(--card-bg); padding: 25px; border-radius: var(--radius); width: 100%; max-width: 500px; max-height:90vh; overflow-y:auto; }
+
+  .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 10px 20px; border-radius: 20px; z-index: 300; display: none; max-width:90vw; text-align:center; }
+
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; margin-bottom: 4px; font-size: 0.9rem; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text); font-family:inherit;
+  }
+  .form-group textarea { resize:vertical; min-height:80px; }
+
+  .chip { padding: 4px 10px; border-radius: 15px; border: 1px solid var(--border); background: var(--card-bg); cursor: pointer; font-size: 0.85rem; }
+  .chip.active { background: var(--primary); color: white; border-color:var(--primary); }
+
+  .timer-display { font-size: 4rem; font-weight: 700; text-align: center; color: var(--primary); margin: 20px 0; }
+
+  .day-col { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:10px; min-height:140px; }
+  .day-col h4 { font-size:.85rem; margin-bottom:8px; color:var(--primary); }
+  .day-item { background:var(--primary-light); border-radius:6px; padding:6px 8px; font-size:.8rem; margin-bottom:6px; display:flex; justify-content:space-between; gap:6px; }
+  .day-item button { background:none; border:none; color:var(--danger); cursor:pointer; font-size:.9rem; }
+
+  .footer-brand { text-align:center; color:var(--text-muted); font-size:.75rem; margin-top:30px; }
+
+  .empty-state { text-align:center; padding:30px 10px; color:var(--text-muted); }
+
+  @media print {
+    header, .nav-mobile, .nav-desktop, .btn, .theme-toggle, .modal-overlay, .toast, #view-focus, .footer-brand { display:none !important; }
+    body { padding:0; background:#fff; color:#000; }
+    .view { display:none !important; }
+    .view.printing { display:block !important; }
+    .card { box-shadow:none; border:1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">🎓 Miora BAC</div>
+  <nav class="nav-desktop" id="desktopNav">
+    <button class="nav-btn active" data-view="dashboard"><span data-i18n="navHome"></span></button>
+    <button class="nav-btn" data-view="matrix"><span data-i18n="navMatrix"></span></button>
+    <button class="nav-btn" data-view="spaced"><span data-i18n="navSpaced"></span><span class="nav-badge" id="badgeSpacedDesktop"></span></button>
+    <button class="nav-btn" data-view="tasks"><span data-i18n="navTasks"></span></button>
+    <button class="nav-btn" data-view="plan"><span data-i18n="navPlan"></span></button>
+    <button class="nav-btn" data-view="today"><span data-i18n="navToday"></span></button>
+    <button class="nav-btn" data-view="focus"><span data-i18n="navFocus"></span></button>
+    <button class="nav-btn" data-view="review"><span data-i18n="navReview"></span></button>
+    <button class="nav-btn" data-view="settings"><span data-i18n="navSettings"></span></button>
+  </nav>
+  <button class="theme-toggle" id="btnThemeToggle">🌙</button>
+</header>
+
+<main>
+  <!-- Dashboard -->
+  <section id="view-dashboard" class="view active">
+    <div class="card">
+      <h2 data-i18n="dashWelcomeTitle"></h2>
+      <p style="color: var(--text-muted); margin-top: 5px;" data-i18n="dashWelcomeSub"></p>
+    </div>
+    <div class="grid-4">
+      <div class="card"><h3 data-i18n="statTotalTasks"></h3><p id="dashTotalTasks" style="font-size: 1.8rem; font-weight:700;">0</p></div>
+      <div class="card"><h3 data-i18n="statReviewsToday"></h3><p id="dashSRDue" style="font-size: 1.8rem; font-weight:700; color:var(--accent);">0</p></div>
+      <div class="card"><h3 data-i18n="statFocusSessions"></h3><p id="dashFocusCount" style="font-size: 1.8rem; font-weight:700; color:var(--success);">0</p></div>
+      <div class="card"><h3 data-i18n="statCompletionRate"></h3><p id="dashCompletionRate" style="font-size: 1.8rem; font-weight:700;">0%</p></div>
+    </div>
+    <div class="card">
+      <h2 data-i18n="dashUpcomingTasks"></h2>
+      <div id="dashTodayList" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- Matrix -->
+  <section id="view-matrix" class="view">
+    <div class="card">
+      <div class="row-between">
+        <h2 data-i18n="matrixTitle"></h2>
+        <button class="btn outline sm" id="btnPrintMatrix" data-i18n="btnPrint"></button>
+      </div>
+      <p class="q-hint" data-i18n="matrixHint"></p>
+      <div class="matrix">
+        <div class="q-box q1" data-important="1" data-urgent="1">
+          <h3 data-i18n="q1Title"></h3><div id="q1List"></div>
+        </div>
+        <div class="q-box q2" data-important="1" data-urgent="0">
+          <h3 data-i18n="q2Title"></h3><div id="q2List"></div>
+        </div>
+        <div class="q-box q3" data-important="0" data-urgent="1">
+          <h3 data-i18n="q3Title"></h3><div id="q3List"></div>
+        </div>
+        <div class="q-box q4" data-important="0" data-urgent="0">
+          <h3 data-i18n="q4Title"></h3><div id="q4List"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spaced Repetition -->
+  <section id="view-spaced" class="view">
+    <div class="card">
+      <div class="row-between">
+        <h2 data-i18n="spacedTitle"></h2>
+        <button class="btn" id="btnAddLesson" data-i18n="btnAddLesson"></button>
+      </div>
+      <p class="q-hint" data-i18n="spacedHint"></p>
+      <button class="btn outline" id="btnReqNotification" style="margin-top:10px;" data-i18n="btnEnableNotif"></button>
+      <div style="margin-top: 15px;" id="srContainer"></div>
+    </div>
+  </section>
+
+  <!-- Tasks -->
+  <section id="view-tasks" class="view">
+    <div class="card">
+      <div class="row-between">
+        <h2 data-i18n="tasksTitle"></h2>
+        <button class="btn" id="btnAddTaskList" data-i18n="btnAddTask"></button>
+      </div>
+      <div style="display:flex; gap:10px; margin: 15px 0;">
+        <input type="text" id="taskSearch" data-i18n-ph="searchPlaceholder">
+      </div>
+      <div id="taskFilterChips" style="display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;">
+        <button class="chip active" data-filter="all" data-i18n="filterAll"></button>
+        <button class="chip" data-filter="pending" data-i18n="filterPending"></button>
+        <button class="chip" data-filter="done" data-i18n="filterDone"></button>
+      </div>
+      <div id="taskListWrap"></div>
+    </div>
+  </section>
+
+  <!-- Weekly Plan -->
+  <section id="view-plan" class="view">
+    <div class="card">
+      <div class="row-between">
+        <h2 data-i18n="planTitle"></h2>
+        <button class="btn outline sm" id="btnPrintPlan" data-i18n="btnPrint"></button>
+      </div>
+      <p class="q-hint" data-i18n="planHint"></p>
+      <div class="grid-7" id="weekGrid" style="margin-top:15px;"></div>
+    </div>
+  </section>
+
+  <!-- Today's plan -->
+  <section id="view-today" class="view">
+    <div class="card">
+      <h2 id="todayTitle"></h2>
+      <p class="q-hint" data-i18n="todayHint"></p>
+      <div id="todayTasksList" style="margin-top:15px;"></div>
+      <h3 style="margin-top:20px; font-size:1rem;" data-i18n="todayLessonsHeading"></h3>
+      <div id="todaySRList" style="margin-top:10px;"></div>
+    </div>
+  </section>
+
+  <!-- Focus -->
+  <section id="view-focus" class="view">
+    <div class="card" style="text-align: center;">
+      <h2 data-i18n="focusTitle"></h2>
+      <div class="timer-display" id="timerDisplay">25:00</div>
+      <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+        <button class="btn" id="btnTimerStart" data-i18n="btnStart"></button>
+        <button class="btn outline" id="btnTimerPause" data-i18n="btnPause"></button>
+        <button class="btn danger" id="btnTimerReset" data-i18n="btnReset"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Weekly Review -->
+  <section id="view-review" class="view">
+    <div class="card">
+      <h2 data-i18n="reviewTitle"></h2>
+      <p class="q-hint" data-i18n="reviewHint"></p>
+      <div class="grid-4" style="margin-top:15px;">
+        <div class="card"><h3 data-i18n="statCompletedTasks"></h3><p id="reviewCompleted" style="font-size:1.6rem; font-weight:700;">0</p></div>
+        <div class="card"><h3 data-i18n="statPendingTasks"></h3><p id="reviewPending" style="font-size:1.6rem; font-weight:700;">0</p></div>
+        <div class="card"><h3 data-i18n="statFocusSessions"></h3><p id="reviewFocus" style="font-size:1.6rem; font-weight:700;">0</p></div>
+        <div class="card"><h3 data-i18n="statLessonsReviewed"></h3><p id="reviewLessons" style="font-size:1.6rem; font-weight:700;">0</p></div>
+      </div>
+      <div class="form-group" style="margin-top:15px;">
+        <label data-i18n="reviewNoteLabel"></label>
+        <textarea id="reviewNoteInput" data-i18n-ph="reviewNotePlaceholder"></textarea>
+      </div>
+      <button class="btn" id="btnSaveReview" data-i18n="btnSaveReview"></button>
+      <div id="reviewHistory" style="margin-top:20px;"></div>
+    </div>
+  </section>
+
+  <!-- Settings -->
+  <section id="view-settings" class="view">
+    <div class="card">
+      <h2 data-i18n="settingsTitle"></h2>
+      <div class="form-group" style="margin-top:15px;">
+        <label data-i18n="languageLabel"></label>
+        <select id="setLanguage">
+          <option value="ar">العربية</option>
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-i18n="focusDurationLabel"></label>
+        <input type="number" id="setFocusMin" value="25" min="1">
+      </div>
+      <button class="btn" id="btnSaveSettings" data-i18n="btnSaveSettings"></button>
+      <hr style="margin:20px 0; border:0; border-top:1px solid var(--border);">
+      <h3 data-i18n="dataSectionTitle"></h3>
+      <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+        <button class="btn" id="btnExportBackup" data-i18n="btnExport"></button>
+        <button class="btn outline" id="btnImportTrigger" data-i18n="btnImport"></button>
+        <input type="file" id="importFile" accept="application/json" style="display:none;">
+        <button class="btn danger" id="btnResetAll" data-i18n="btnResetAll"></button>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-brand">MIORA STUDIO · BAC STUDY SYSTEM</div>
+</main>
+
+<nav class="nav-mobile">
+  <button class="nav-btn active" data-view="dashboard">🏠 <span data-i18n="navHome"></span></button>
+  <button class="nav-btn" data-view="matrix">📊 <span data-i18n="navMatrix"></span></button>
+  <button class="nav-btn" data-view="spaced">🔄 <span data-i18n="navSpacedShort"></span><span class="nav-badge" id="badgeSpacedMobile"></span></button>
+  <button class="nav-btn" data-view="tasks">✅ <span data-i18n="navTasks"></span></button>
+  <button class="nav-btn" data-view="plan">🗓️ <span data-i18n="navPlanShort"></span></button>
+  <button class="nav-btn" data-view="today">📌 <span data-i18n="navTodayShort"></span></button>
+  <button class="nav-btn" data-view="focus">⏱️ <span data-i18n="navFocusShort"></span></button>
+  <button class="nav-btn" data-view="review">📝 <span data-i18n="navReviewShort"></span></button>
+  <button class="nav-btn" data-view="settings">⚙️ <span data-i18n="navSettings"></span></button>
+</nav>
+
+<!-- Task Modal -->
+<div class="modal-overlay hidden" id="taskModalOverlay">
+  <div class="modal">
+    <h3 data-i18n="addTaskTitle"></h3>
+    <div class="form-group" style="margin-top:10px;">
+      <label data-i18n="taskNameLabel"></label>
+      <input type="text" id="fTaskName">
+    </div>
+    <div class="form-group">
+      <label data-i18n="prioritiesLabel"></label>
+      <div style="display:flex; gap:10px;">
+        <label><input type="checkbox" id="fImportant"> <span data-i18n="important"></span></label>
+        <label><input type="checkbox" id="fUrgent"> <span data-i18n="urgent"></span></label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label data-i18n="dayLabel"></label>
+      <select id="fDay">
+        <option value="" data-i18n="noDay"></option>
+        <option value="0" data-i18n="day0"></option>
+        <option value="1" data-i18n="day1"></option>
+        <option value="2" data-i18n="day2"></option>
+        <option value="3" data-i18n="day3"></option>
+        <option value="4" data-i18n="day4"></option>
+        <option value="5" data-i18n="day5"></option>
+        <option value="6" data-i18n="day6"></option>
+      </select>
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+      <button class="btn outline" id="btnCancelTask" data-i18n="btnCancel"></button>
+      <button class="btn" id="btnSaveTask" data-i18n="btnSaveTask"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Lesson Modal -->
+<div class="modal-overlay hidden" id="lessonModalOverlay">
+  <div class="modal">
+    <h3 data-i18n="addLessonTitle"></h3>
+    <div class="form-group" style="margin-top:10px;">
+      <label data-i18n="lessonNameLabel"></label>
+      <input type="text" id="fLessonName">
+    </div>
+    <div class="form-group">
+      <label data-i18n="subjectLabel"></label>
+      <input type="text" id="fLessonSubject" data-i18n-ph="subjectPlaceholder">
+    </div>
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:15px;">
+      <button class="btn outline" id="btnCancelLesson" data-i18n="btnCancel"></button>
+      <button class="btn" id="btnSaveLesson" data-i18n="btnSaveLesson"></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const STORAGE_KEY = 'MIORA_BAC_SYSTEM_DATA';
+const SR_INTERVALS = [1, 3, 7, 15, 30, 60];
+const LOCALE_MAP = { ar: 'ar-EG', fr: 'fr-FR', en: 'en-US' };
+
+const I18N = {
+  ar: {
+    navHome: 'الرئيسية', navMatrix: 'المصفوفة', navSpaced: 'التكرار المتباعد', navSpacedShort: 'المراجعة',
+    navTasks: 'المهام', navPlan: 'الجدول الأسبوعي', navPlanShort: 'الجدول', navToday: 'خطة اليوم', navTodayShort: 'اليوم',
+    navFocus: 'مؤقت التركيز', navFocusShort: 'التركيز', navReview: 'المراجعة الأسبوعية', navReviewShort: 'أسبوعي', navSettings: 'الإعدادات',
+    dashWelcomeTitle: 'أهلاً بك في نظام Miora BAC للدراسة لشهادة البكالوريا 🚀',
+    dashWelcomeSub: 'تابع تقدمك وحافظ على استمرارية إنتاجيتك.',
+    statTotalTasks: 'إجمالي المهام', statReviewsToday: 'المراجعات اليوم', statFocusSessions: 'جلسات التركيز', statCompletionRate: 'نسبة الإنجاز',
+    dashUpcomingTasks: 'مهام اليوم القادمة', emptyNoTasksToday: 'لا توجد مهام مجدولة لليوم.',
+    matrixTitle: 'مصفوفة آيزنهاور لتحديد الأولويات', btnPrint: '🖨️ طباعة',
+    matrixHint: 'اسحب أي مهمة وأفلتها في الربع المناسب لتغيير أولويتها.',
+    q1Title: '🔥 هام وعاجل (افعل الآن)', q2Title: '📅 هام وغير عاجل (جدول)', q3Title: '⚡ غير هام وعاجل (فوض/قلل)', q4Title: '☕ غير هام وغير عاجل (اترك)',
+    spacedTitle: 'مراجعة الدروس (التكرار المتباعد)', btnAddLesson: '+ إضافة درس',
+    spacedHint: 'كل درس تراجعه بنجاح يبتعد موعد مراجعته القادمة تلقائياً (1 ← 3 ← 7 ← 15 ← 30 ← 60 يوم).',
+    btnEnableNotif: '🔔 تفعيل إشعارات المراجعة',
+    emptyNoLessons: 'لا توجد دروس بعد. أضف أول درس لبدء المراجعة المتباعدة.',
+    dueToday: 'مستحقة اليوم', reviewDatePrefix: 'موعد المراجعة: ',
+    btnRemembered: 'تذكرتها ✓', btnForgot: 'نسيتها', btnDelete: 'حذف',
+    tasksTitle: 'إدارة المهام', btnAddTask: '+ إضافة مهمة', searchPlaceholder: 'بحث عن مهمة...',
+    filterAll: 'الكل', filterPending: 'المعلقة', filterDone: 'المكتملة', emptyNoTasksMatch: 'لا توجد مهام مطابقة.',
+    btnDone: 'إنجاز', btnUndo: 'إلغاء',
+    planTitle: 'الجدول الأسبوعي', planHint: 'وزع مهامك على أيام الأسبوع لتنظيم وقت المذاكرة.', noTasksDay: 'لا مهام', removeFromSchedule: 'إزالة من الجدول',
+    todayTitlePrefix: 'خطة اليوم', todayHint: 'مهام مجدولة اليوم + دروس مستحقة للمراجعة.',
+    todayLessonsHeading: 'دروس للمراجعة اليوم', emptyNoLessonsDueToday: 'لا توجد دروس مستحقة اليوم 🎉',
+    focusTitle: 'جلسة تركيز (بومودورو)', btnStart: 'بدء', btnPause: 'إيقاف مؤقت', btnReset: 'إعادة ضبط', focusSessionDone: '🎉 انتهت جلسة التركيز!',
+    reviewTitle: 'المراجعة الأسبوعية', reviewHint: 'خصص بضع دقائق لتقييم أسبوعك.',
+    statCompletedTasks: 'مهام مكتملة', statPendingTasks: 'مهام معلقة', statLessonsReviewed: 'دروس رُوجعت',
+    reviewNoteLabel: 'ملاحظات هذا الأسبوع (ما الذي نجح؟ ما الذي يجب تحسينه؟)', reviewNotePlaceholder: 'اكتب ملاحظاتك هنا...',
+    btnSaveReview: 'حفظ ملاحظة الأسبوع', pastNotesTitle: 'ملاحظات سابقة',
+    settingsTitle: 'إعدادات النظام والنسخ الاحتياطي', languageLabel: 'اللغة', focusDurationLabel: 'مدة جلسة التركيز (بالدقائق):',
+    btnSaveSettings: 'حفظ الإعدادات', dataSectionTitle: 'البيانات', btnExport: '⬇️ تصدير نسخة احتياطية', btnImport: '⬆️ استيراد نسخة احتياطية', btnResetAll: 'مسح جميع البيانات',
+    addTaskTitle: 'إضافة مهمة جديدة', taskNameLabel: 'عنوان المهمة *', prioritiesLabel: 'الأولويات', important: 'هام', urgent: 'عاجل',
+    dayLabel: 'يوم الجدول الأسبوعي (اختياري)', noDay: 'بدون تحديد',
+    day0: 'الأحد', day1: 'الاثنين', day2: 'الثلاثاء', day3: 'الأربعاء', day4: 'الخميس', day5: 'الجمعة', day6: 'السبت',
+    btnCancel: 'إلغاء',
+    addLessonTitle: 'إضافة درس للمراجعة المتباعدة', lessonNameLabel: 'اسم الدرس *', subjectLabel: 'المادة', subjectPlaceholder: 'مثال: الرياضيات',
+    btnSaveTask: 'حفظ المهمة', btnSaveLesson: 'حفظ الدرس',
+    toastPriorityUpdated: '✓ تم تحديث أولوية المهمة', toastTaskNameRequired: 'يرجى إدخال عنوان المهمة', toastTaskAdded: '✓ تم إضافة المهمة',
+    toastLessonNameRequired: 'يرجى إدخال اسم الدرس', toastLessonAdded: '✓ تم إضافة الدرس',
+    toastNotifEnabled: '✓ تم تفعيل إشعارات المتصفح بنجاح', toastNotifDenied: '⚠️ تم رفض إذن الإشعارات من إعدادات المتصفح',
+    notifExplainAlert: 'إشعارات المتصفح تعمل فقط عند فتح الموقع عبر الإنترنت (https) وليس عند فتح الملف مباشرة من جهازك.\n\nلا داعي للقلق: التطبيق يذكّرك تلقائياً بعدد الدروس المستحقة كل مرة تفتحه فيها، عبر الشارة الحمراء بجانب "التكرار المتباعد" وفي لوحة التحكم.',
+    toastSettingsSaved: '✓ تم حفظ الإعدادات', toastImportSuccess: '✓ تم استيراد النسخة الاحتياطية بنجاح', toastImportError: '⚠️ ملف غير صالح',
+    toastDataReset: 'تمت إعادة ضبط النظام', toastReviewNoteRequired: 'اكتب ملاحظة أولاً', toastReviewSaved: '✓ تم حفظ ملاحظة الأسبوع',
+    confirmDeleteTask: 'حذف هذه المهمة نهائياً؟', confirmDeleteLesson: 'حذف هذا الدرس من المراجعة المتباعدة؟',
+    confirmResetAll: 'هل أنت متأكد من حذف جميع البيانات؟ لا يمكن التراجع عن هذا الإجراء.'
+  },
+  fr: {
+    navHome: 'Accueil', navMatrix: 'Matrice', navSpaced: 'Répétition espacée', navSpacedShort: 'Révision',
+    navTasks: 'Tâches', navPlan: 'Planning hebdo', navPlanShort: 'Planning', navToday: 'Plan du jour', navTodayShort: 'Aujourd\u2019hui',
+    navFocus: 'Minuteur de concentration', navFocusShort: 'Concentration', navReview: 'Bilan hebdomadaire', navReviewShort: 'Bilan', navSettings: 'Paramètres',
+    dashWelcomeTitle: 'Bienvenue dans Miora BAC, ton système d\u2019étude pour le Baccalauréat 🚀',
+    dashWelcomeSub: 'Suis ta progression et reste productif.',
+    statTotalTasks: 'Total des tâches', statReviewsToday: 'Révisions aujourd\u2019hui', statFocusSessions: 'Sessions de concentration', statCompletionRate: 'Taux d\u2019achèvement',
+    dashUpcomingTasks: 'Tâches du jour', emptyNoTasksToday: 'Aucune tâche prévue aujourd\u2019hui.',
+    matrixTitle: 'Matrice d\u2019Eisenhower des priorités', btnPrint: '🖨️ Imprimer',
+    matrixHint: 'Glisse-dépose une tâche dans le bon quadrant pour changer sa priorité.',
+    q1Title: '🔥 Important et urgent (à faire maintenant)', q2Title: '📅 Important, non urgent (à planifier)', q3Title: '⚡ Urgent, non important (déléguer/limiter)', q4Title: '☕ Non important, non urgent (à laisser)',
+    spacedTitle: 'Révision des leçons (répétition espacée)', btnAddLesson: '+ Ajouter une leçon',
+    spacedHint: 'Chaque leçon révisée avec succès voit son prochain rappel s\u2019éloigner automatiquement (1 → 3 → 7 → 15 → 30 → 60 jours).',
+    btnEnableNotif: '🔔 Activer les notifications',
+    emptyNoLessons: 'Aucune leçon pour l\u2019instant. Ajoute ta première leçon pour commencer.',
+    dueToday: 'À réviser aujourd\u2019hui', reviewDatePrefix: 'Prochaine révision : ',
+    btnRemembered: 'Je m\u2019en souviens ✓', btnForgot: 'Oublié', btnDelete: 'Supprimer',
+    tasksTitle: 'Gestion des tâches', btnAddTask: '+ Ajouter une tâche', searchPlaceholder: 'Rechercher une tâche...',
+    filterAll: 'Toutes', filterPending: 'En attente', filterDone: 'Terminées', emptyNoTasksMatch: 'Aucune tâche correspondante.',
+    btnDone: 'Terminer', btnUndo: 'Annuler',
+    planTitle: 'Planning hebdomadaire', planHint: 'Répartis tes tâches sur les jours de la semaine.', noTasksDay: 'Aucune tâche', removeFromSchedule: 'Retirer du planning',
+    todayTitlePrefix: 'Plan du jour', todayHint: 'Tâches et leçons prévues pour aujourd\u2019hui.',
+    todayLessonsHeading: 'Leçons à réviser aujourd\u2019hui', emptyNoLessonsDueToday: 'Aucune leçon à réviser aujourd\u2019hui 🎉',
+    focusTitle: 'Session de concentration (Pomodoro)', btnStart: 'Démarrer', btnPause: 'Pause', btnReset: 'Réinitialiser', focusSessionDone: '🎉 Session de concentration terminée !',
+    reviewTitle: 'Bilan hebdomadaire', reviewHint: 'Prends quelques minutes pour évaluer ta semaine.',
+    statCompletedTasks: 'Tâches terminées', statPendingTasks: 'Tâches en attente', statLessonsReviewed: 'Leçons révisées',
+    reviewNoteLabel: 'Notes de la semaine (qu\u2019est-ce qui a marché ? à améliorer ?)', reviewNotePlaceholder: 'Écris tes notes ici...',
+    btnSaveReview: 'Enregistrer la note', pastNotesTitle: 'Notes précédentes',
+    settingsTitle: 'Paramètres et sauvegarde', languageLabel: 'Langue', focusDurationLabel: 'Durée de la session (en minutes) :',
+    btnSaveSettings: 'Enregistrer', dataSectionTitle: 'Données', btnExport: '⬇️ Exporter une sauvegarde', btnImport: '⬆️ Importer une sauvegarde', btnResetAll: 'Supprimer toutes les données',
+    addTaskTitle: 'Nouvelle tâche', taskNameLabel: 'Titre de la tâche *', prioritiesLabel: 'Priorités', important: 'Important', urgent: 'Urgent',
+    dayLabel: 'Jour du planning (optionnel)', noDay: 'Non défini',
+    day0: 'Dimanche', day1: 'Lundi', day2: 'Mardi', day3: 'Mercredi', day4: 'Jeudi', day5: 'Vendredi', day6: 'Samedi',
+    btnCancel: 'Annuler',
+    addLessonTitle: 'Nouvelle leçon (répétition espacée)', lessonNameLabel: 'Nom de la leçon *', subjectLabel: 'Matière', subjectPlaceholder: 'Ex. : Mathématiques',
+    btnSaveTask: 'Enregistrer la tâche', btnSaveLesson: 'Enregistrer la leçon',
+    toastPriorityUpdated: '✓ Priorité mise à jour', toastTaskNameRequired: 'Merci de saisir un titre', toastTaskAdded: '✓ Tâche ajoutée',
+    toastLessonNameRequired: 'Merci de saisir un nom de leçon', toastLessonAdded: '✓ Leçon ajoutée',
+    toastNotifEnabled: '✓ Notifications activées', toastNotifDenied: '⚠️ Permission refusée',
+    notifExplainAlert: 'Les notifications du navigateur ne fonctionnent que si le site est ouvert via Internet (https), pas en ouvrant le fichier directement depuis ton appareil.\n\nPas d\u2019inquiétude : l\u2019application te rappelle automatiquement le nombre de leçons dues à chaque ouverture, via le badge rouge près de « Répétition espacée » et sur le tableau de bord.',
+    toastSettingsSaved: '✓ Paramètres enregistrés', toastImportSuccess: '✓ Sauvegarde importée avec succès', toastImportError: '⚠️ Fichier invalide',
+    toastDataReset: 'Réinitialisation effectuée', toastReviewNoteRequired: 'Écris d\u2019abord une note', toastReviewSaved: '✓ Note enregistrée',
+    confirmDeleteTask: 'Supprimer définitivement cette tâche ?', confirmDeleteLesson: 'Supprimer cette leçon de la répétition espacée ?',
+    confirmResetAll: 'Es-tu sûr de vouloir supprimer toutes les données ? Cette action est irréversible.'
+  },
+  en: {
+    navHome: 'Home', navMatrix: 'Matrix', navSpaced: 'Spaced Repetition', navSpacedShort: 'Review',
+    navTasks: 'Tasks', navPlan: 'Weekly Plan', navPlanShort: 'Plan', navToday: 'Today\u2019s Plan', navTodayShort: 'Today',
+    navFocus: 'Focus Timer', navFocusShort: 'Focus', navReview: 'Weekly Review', navReviewShort: 'Review', navSettings: 'Settings',
+    dashWelcomeTitle: 'Welcome to Miora BAC, your Baccalaureate study system 🚀',
+    dashWelcomeSub: 'Track your progress and stay productive.',
+    statTotalTasks: 'Total Tasks', statReviewsToday: 'Reviews Today', statFocusSessions: 'Focus Sessions', statCompletionRate: 'Completion Rate',
+    dashUpcomingTasks: 'Today\u2019s Tasks', emptyNoTasksToday: 'No tasks scheduled for today.',
+    matrixTitle: 'Eisenhower Priority Matrix', btnPrint: '🖨️ Print',
+    matrixHint: 'Drag and drop a task into the right quadrant to change its priority.',
+    q1Title: '🔥 Important & Urgent (Do now)', q2Title: '📅 Important, Not Urgent (Schedule)', q3Title: '⚡ Urgent, Not Important (Delegate/Limit)', q4Title: '☕ Not Important, Not Urgent (Drop)',
+    spacedTitle: 'Lesson Review (Spaced Repetition)', btnAddLesson: '+ Add Lesson',
+    spacedHint: 'Each successfully reviewed lesson automatically pushes its next review further out (1 → 3 → 7 → 15 → 30 → 60 days).',
+    btnEnableNotif: '🔔 Enable Review Notifications',
+    emptyNoLessons: 'No lessons yet. Add your first lesson to start spaced repetition.',
+    dueToday: 'Due today', reviewDatePrefix: 'Next review: ',
+    btnRemembered: 'Remembered ✓', btnForgot: 'Forgot', btnDelete: 'Delete',
+    tasksTitle: 'Task Management', btnAddTask: '+ Add Task', searchPlaceholder: 'Search tasks...',
+    filterAll: 'All', filterPending: 'Pending', filterDone: 'Completed', emptyNoTasksMatch: 'No matching tasks.',
+    btnDone: 'Done', btnUndo: 'Undo',
+    planTitle: 'Weekly Schedule', planHint: 'Distribute your tasks across the days of the week.', noTasksDay: 'No tasks', removeFromSchedule: 'Remove from schedule',
+    todayTitlePrefix: 'Today\u2019s Plan', todayHint: 'Tasks and lessons due today.',
+    todayLessonsHeading: 'Lessons to review today', emptyNoLessonsDueToday: 'No lessons due today 🎉',
+    focusTitle: 'Focus Session (Pomodoro)', btnStart: 'Start', btnPause: 'Pause', btnReset: 'Reset', focusSessionDone: '🎉 Focus session complete!',
+    reviewTitle: 'Weekly Review', reviewHint: 'Take a few minutes to reflect on your week.',
+    statCompletedTasks: 'Completed Tasks', statPendingTasks: 'Pending Tasks', statLessonsReviewed: 'Lessons Reviewed',
+    reviewNoteLabel: 'This week\u2019s notes (what worked? what to improve?)', reviewNotePlaceholder: 'Write your notes here...',
+    btnSaveReview: 'Save Weekly Note', pastNotesTitle: 'Past Notes',
+    settingsTitle: 'Settings & Backup', languageLabel: 'Language', focusDurationLabel: 'Focus session duration (minutes):',
+    btnSaveSettings: 'Save Settings', dataSectionTitle: 'Data', btnExport: '⬇️ Export Backup', btnImport: '⬆️ Import Backup', btnResetAll: 'Delete All Data',
+    addTaskTitle: 'Add New Task', taskNameLabel: 'Task title *', prioritiesLabel: 'Priorities', important: 'Important', urgent: 'Urgent',
+    dayLabel: 'Weekly schedule day (optional)', noDay: 'None',
+    day0: 'Sunday', day1: 'Monday', day2: 'Tuesday', day3: 'Wednesday', day4: 'Thursday', day5: 'Friday', day6: 'Saturday',
+    btnCancel: 'Cancel',
+    addLessonTitle: 'Add Lesson (Spaced Repetition)', lessonNameLabel: 'Lesson name *', subjectLabel: 'Subject', subjectPlaceholder: 'e.g. Mathematics',
+    btnSaveTask: 'Save Task', btnSaveLesson: 'Save Lesson',
+    toastPriorityUpdated: '✓ Task priority updated', toastTaskNameRequired: 'Please enter a task title', toastTaskAdded: '✓ Task added',
+    toastLessonNameRequired: 'Please enter a lesson name', toastLessonAdded: '✓ Lesson added',
+    toastNotifEnabled: '✓ Browser notifications enabled', toastNotifDenied: '⚠️ Notification permission denied',
+    notifExplainAlert: 'Browser notifications only work when the site is opened online (https), not when opening the file directly from your device.\n\nNo worries: the app automatically reminds you of due lessons every time you open it, via the red badge next to "Spaced Repetition" and on the dashboard.',
+    toastSettingsSaved: '✓ Settings saved', toastImportSuccess: '✓ Backup imported successfully', toastImportError: '⚠️ Invalid file',
+    toastDataReset: 'System reset complete', toastReviewNoteRequired: 'Write a note first', toastReviewSaved: '✓ Note saved',
+    confirmDeleteTask: 'Permanently delete this task?', confirmDeleteLesson: 'Delete this lesson from spaced repetition?',
+    confirmResetAll: 'Are you sure you want to delete all data? This cannot be undone.'
+  }
+};
+
+function t(key) {
+  const lang = data.settings.lang || 'ar';
+  return (I18N[lang] && I18N[lang][key]) || I18N.ar[key] || key;
+}
+function dayNames() {
+  return [t('day0'), t('day1'), t('day2'), t('day3'), t('day4'), t('day5'), t('day6')];
+}
+function formatDate(iso) {
+  const lang = data.settings.lang || 'ar';
+  try { return new Date(iso).toLocaleDateString(LOCALE_MAP[lang] || 'ar-EG'); } catch(e) { return iso; }
+}
+function dueBannerText(n) {
+  const lang = data.settings.lang || 'ar';
+  if (lang === 'fr') return `🔔 Tu as ${n} leçon${n > 1 ? 's' : ''} à réviser aujourd\u2019hui`;
+  if (lang === 'en') return `🔔 You have ${n} lesson${n > 1 ? 's' : ''} due for review today`;
+  return `🔔 لديك ${n} ${n === 1 ? 'درس مستحق' : 'دروس مستحقة'} للمراجعة اليوم`;
+}
+function reminderIntervalText(interval) {
+  const lang = data.settings.lang || 'ar';
+  if (lang === 'fr') return `✓ Rappel dans ${interval} jour${interval > 1 ? 's' : ''}`;
+  if (lang === 'en') return `✓ You\u2019ll be reminded in ${interval} day${interval > 1 ? 's' : ''}`;
+  return `✓ سيتم تذكيرك بعد ${interval} يوم`;
+}
+function reviewTomorrowText() {
+  const lang = data.settings.lang || 'ar';
+  if (lang === 'fr') return 'Sera revue demain';
+  if (lang === 'en') return 'Will be reviewed tomorrow';
+  return '↻ ستتم مراجعتها غداً';
+}
+
+const defaultData = () => ({
+  tasks: [],
+  lessons: [],
+  focusLog: [],
+  reviewNotes: [],
+  settings: { focusMin: 25, darkTheme: false, lang: 'ar' },
+  nextId: 1,
+  nextLessonId: 1
+});
+
+let data;
+try {
+  data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || defaultData();
+} catch(e) { data = defaultData(); }
+// Migration safety for older backups
+if (!data.lessons) data.lessons = [];
+if (!data.reviewNotes) data.reviewNotes = [];
+if (!data.settings) data.settings = { focusMin: 25, darkTheme: false, lang: 'ar' };
+if (!data.settings.lang) data.settings.lang = 'ar';
+if (!data.nextLessonId) data.nextLessonId = 1;
+
+function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function todayISO() { return new Date().toISOString().slice(0,10); }
+
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2800);
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+/* ---------- Language ---------- */
+function applyLanguage() {
+  const lang = data.settings.lang || 'ar';
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('setLanguage').value = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-ph')); });
+  renderAll();
+}
+document.getElementById('setLanguage').addEventListener('change', e => {
+  data.settings.lang = e.target.value;
+  saveData();
+  applyLanguage();
+});
+
+/* ---------- Theme ---------- */
+const btnThemeToggle = document.getElementById('btnThemeToggle');
+function applyTheme(isDark) {
+  if (isDark) { document.documentElement.setAttribute('data-theme', 'dark'); btnThemeToggle.textContent = '☀️'; }
+  else { document.documentElement.removeAttribute('data-theme'); btnThemeToggle.textContent = '🌙'; }
+}
+applyTheme(data.settings.darkTheme);
+btnThemeToggle.addEventListener('click', () => {
+  data.settings.darkTheme = !data.settings.darkTheme;
+  applyTheme(data.settings.darkTheme);
+  saveData();
+});
+
+/* ---------- View Switcher ---------- */
+function switchView(viewId) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-view') === viewId));
+  const target = document.getElementById(`view-${viewId}`);
+  if (target) target.classList.add('active');
+  renderAll();
+}
+document.querySelectorAll('.nav-btn').forEach(btn => {
+  btn.addEventListener('click', () => switchView(btn.getAttribute('data-view')));
+});
+
+/* ---------- Render All ---------- */
+let taskFilter = 'all';
+let taskSearchTerm = '';
+
+function renderAll() {
+  renderDashboard();
+  renderMatrix();
+  renderTasks();
+  renderSpacedRepetition();
+  renderWeekPlan();
+  renderTodayView();
+  renderReview();
+}
+
+function renderDashboard() {
+  document.getElementById('dashTotalTasks').textContent = data.tasks.length;
+  const completed = data.tasks.filter(t => t.done).length;
+  const rate = data.tasks.length ? Math.round((completed / data.tasks.length) * 100) : 0;
+  document.getElementById('dashCompletionRate').textContent = `${rate}%`;
+  document.getElementById('dashFocusCount').textContent = data.focusLog.length;
+  const due = data.lessons.filter(l => l.nextReview <= todayISO()).length;
+  document.getElementById('dashSRDue').textContent = due;
+  [document.getElementById('badgeSpacedDesktop'), document.getElementById('badgeSpacedMobile')].forEach(b => {
+    if (!b) return;
+    b.textContent = due;
+    b.classList.toggle('show', due > 0);
+  });
+
+  const todayIdx = new Date().getDay();
+  const list = document.getElementById('dashTodayList');
+  const todaysTasks = data.tasks.filter(x => !x.done && String(x.day) === String(todayIdx));
+  list.innerHTML = todaysTasks.length ? '' : `<p class="empty-state">${t('emptyNoTasksToday')}</p>`;
+  todaysTasks.forEach(x => {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `<span class="name">${escapeHtml(x.name)}</span>`;
+    list.appendChild(div);
+  });
+}
+
+/* ---------- Matrix + Drag & Drop ---------- */
+function renderMatrix() {
+  const boxes = { q1: document.getElementById('q1List'), q2: document.getElementById('q2List'), q3: document.getElementById('q3List'), q4: document.getElementById('q4List') };
+  Object.values(boxes).forEach(b => b.innerHTML = '');
+
+  data.tasks.filter(x => !x.done).forEach(x => {
+    const item = document.createElement('div');
+    item.className = 'task-item';
+    item.draggable = true;
+    item.dataset.id = x.id;
+    item.innerHTML = `<span class="name">${escapeHtml(x.name)}</span>`;
+    item.addEventListener('dragstart', () => item.classList.add('dragging'));
+    item.addEventListener('dragend', () => item.classList.remove('dragging'));
+
+    if (x.important && x.urgent) boxes.q1.appendChild(item);
+    else if (x.important && !x.urgent) boxes.q2.appendChild(item);
+    else if (!x.important && x.urgent) boxes.q3.appendChild(item);
+    else boxes.q4.appendChild(item);
+  });
+}
+
+document.querySelectorAll('.q-box').forEach(box => {
+  box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('drag-over'); });
+  box.addEventListener('dragleave', () => box.classList.remove('drag-over'));
+  box.addEventListener('drop', e => {
+    e.preventDefault();
+    box.classList.remove('drag-over');
+    const dragging = document.querySelector('.task-item.dragging');
+    if (!dragging) return;
+    const id = Number(dragging.dataset.id);
+    const task = data.tasks.find(x => x.id === id);
+    if (!task) return;
+    task.important = box.dataset.important === '1';
+    task.urgent = box.dataset.urgent === '1';
+    saveData();
+    renderMatrix();
+    showToast(t('toastPriorityUpdated'));
+  });
+});
+
+document.getElementById('btnPrintMatrix').onclick = () => printView('matrix');
+
+/* ---------- Tasks ---------- */
+function renderTasks() {
+  const wrap = document.getElementById('taskListWrap');
+  wrap.innerHTML = '';
+  let list = data.tasks.slice();
+  if (taskFilter === 'pending') list = list.filter(x => !x.done);
+  if (taskFilter === 'done') list = list.filter(x => x.done);
+  if (taskSearchTerm.trim()) list = list.filter(x => x.name.toLowerCase().includes(taskSearchTerm.trim().toLowerCase()));
+
+  if (!list.length) { wrap.innerHTML = `<p class="empty-state">${t('emptyNoTasksMatch')}</p>`; return; }
+
+  const names = dayNames();
+  list.forEach(x => {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `
+      <span class="name" style="${x.done ? 'text-decoration: line-through; color:var(--text-muted);' : ''}">${escapeHtml(x.name)}${x.day !== '' && x.day !== undefined && x.day !== null ? ` <span style="color:var(--text-muted); font-size:.75rem;">(${names[x.day]})</span>` : ''}</span>
+      <div style="display:flex; gap:6px; flex-shrink:0;">
+        <button class="btn sm" onclick="toggleTask(${x.id})">${x.done ? t('btnUndo') : t('btnDone')}</button>
+        <button class="btn sm danger" onclick="deleteTask(${x.id})">${t('btnDelete')}</button>
+      </div>`;
+    wrap.appendChild(div);
+  });
+}
+
+document.getElementById('taskSearch').addEventListener('input', e => { taskSearchTerm = e.target.value; renderTasks(); });
+document.querySelectorAll('#taskFilterChips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#taskFilterChips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    taskFilter = chip.dataset.filter;
+    renderTasks();
+  });
+});
+
+window.toggleTask = function(id) {
+  const x = data.tasks.find(t => t.id === id);
+  if (x) x.done = !x.done;
+  saveData(); renderAll();
+};
+window.deleteTask = function(id) {
+  if (!confirm(t('confirmDeleteTask'))) return;
+  data.tasks = data.tasks.filter(x => x.id !== id);
+  saveData(); renderAll();
+};
+
+/* ---------- Task Modal ---------- */
+const taskModal = document.getElementById('taskModalOverlay');
+document.getElementById('btnAddTaskList').onclick = () => taskModal.classList.remove('hidden');
+document.getElementById('btnCancelTask').onclick = () => taskModal.classList.add('hidden');
+document.getElementById('btnSaveTask').onclick = () => {
+  const name = document.getElementById('fTaskName').value.trim();
+  if (!name) { showToast(t('toastTaskNameRequired')); return; }
+  const important = document.getElementById('fImportant').checked;
+  const urgent = document.getElementById('fUrgent').checked;
+  const dayVal = document.getElementById('fDay').value;
+  data.tasks.push({ id: data.nextId++, name, important, urgent, done: false, day: dayVal === '' ? null : Number(dayVal), createdAt: new Date().toISOString() });
+  saveData();
+  taskModal.classList.add('hidden');
+  document.getElementById('fTaskName').value = '';
+  document.getElementById('fImportant').checked = false;
+  document.getElementById('fUrgent').checked = false;
+  document.getElementById('fDay').value = '';
+  showToast(t('toastTaskAdded'));
+  renderAll();
+};
+
+/* ---------- Spaced Repetition ---------- */
+function renderSpacedRepetition() {
+  const container = document.getElementById('srContainer');
+  if (!data.lessons.length) { container.innerHTML = `<p class="empty-state">${t('emptyNoLessons')}</p>`; return; }
+  container.innerHTML = '';
+  data.lessons
+    .slice()
+    .sort((a,b) => a.nextReview.localeCompare(b.nextReview))
+    .forEach(l => {
+      const due = l.nextReview <= todayISO();
+      const row = document.createElement('div');
+      row.className = 'sr-item';
+      row.innerHTML = `
+        <div>
+          <div style="font-weight:600;">${escapeHtml(l.name)}</div>
+          <div style="font-size:.8rem; color:var(--text-muted);">${l.subject ? escapeHtml(l.subject) + ' · ' : ''}<span class="sr-badge ${due ? 'due' : ''}">${due ? t('dueToday') : t('reviewDatePrefix') + formatDate(l.nextReview)}</span></div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          ${due ? `<button class="btn sm success" onclick="reviewLesson(${l.id}, true)">${t('btnRemembered')}</button><button class="btn sm outline" onclick="reviewLesson(${l.id}, false)">${t('btnForgot')}</button>` : ''}
+          <button class="btn sm danger" onclick="deleteLesson(${l.id})">${t('btnDelete')}</button>
+        </div>`;
+      container.appendChild(row);
+    });
+}
+
+window.reviewLesson = function(id, remembered) {
+  const l = data.lessons.find(x => x.id === id);
+  if (!l) return;
+  if (remembered) {
+    l.intervalIndex = Math.min((l.intervalIndex ?? -1) + 1, SR_INTERVALS.length - 1);
+  } else {
+    l.intervalIndex = 0;
+  }
+  const interval = SR_INTERVALS[l.intervalIndex];
+  const next = new Date();
+  next.setDate(next.getDate() + interval);
+  l.nextReview = next.toISOString().slice(0,10);
+  l.lastReviewed = todayISO();
+  l.reviewCount = (l.reviewCount || 0) + 1;
+  saveData();
+  showToast(remembered ? reminderIntervalText(interval) : reviewTomorrowText());
+  renderAll();
+};
+window.deleteLesson = function(id) {
+  if (!confirm(t('confirmDeleteLesson'))) return;
+  data.lessons = data.lessons.filter(x => x.id !== id);
+  saveData(); renderAll();
+};
+
+const lessonModal = document.getElementById('lessonModalOverlay');
+document.getElementById('btnAddLesson').onclick = () => lessonModal.classList.remove('hidden');
+document.getElementById('btnCancelLesson').onclick = () => lessonModal.classList.add('hidden');
+document.getElementById('btnSaveLesson').onclick = () => {
+  const name = document.getElementById('fLessonName').value.trim();
+  if (!name) { showToast(t('toastLessonNameRequired')); return; }
+  const subject = document.getElementById('fLessonSubject').value.trim();
+  const next = new Date();
+  next.setDate(next.getDate() + SR_INTERVALS[0]);
+  data.lessons.push({ id: data.nextLessonId++, name, subject, intervalIndex: 0, nextReview: next.toISOString().slice(0,10), lastReviewed: null, reviewCount: 0 });
+  saveData();
+  lessonModal.classList.add('hidden');
+  document.getElementById('fLessonName').value = '';
+  document.getElementById('fLessonSubject').value = '';
+  showToast(t('toastLessonAdded'));
+  renderAll();
+};
+
+document.getElementById('btnReqNotification').onclick = () => {
+  const isSecureHost = 'Notification' in window && (location.protocol === 'https:' || location.hostname === 'localhost');
+  if (isSecureHost) {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        showToast(t('toastNotifEnabled'));
+        new Notification('Miora BAC', { body: t('btnEnableNotif') });
+      } else {
+        showToast(t('toastNotifDenied'));
+      }
+    });
+  } else {
+    alert(t('notifExplainAlert'));
+  }
+};
+
+/* ---------- Weekly Plan ---------- */
+function renderWeekPlan() {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  dayNames().forEach((name, idx) => {
+    const col = document.createElement('div');
+    col.className = 'day-col';
+    const items = data.tasks.filter(x => Number(x.day) === idx);
+    col.innerHTML = `<h4>${escapeHtml(name)}</h4><div class="day-items"></div>`;
+    const itemsWrap = col.querySelector('.day-items');
+    if (!items.length) {
+      itemsWrap.innerHTML = `<p style="font-size:.75rem; color:var(--text-muted);">${t('noTasksDay')}</p>`;
+    } else {
+      items.forEach(x => {
+        const div = document.createElement('div');
+        div.className = 'day-item';
+        div.innerHTML = `<span style="${x.done ? 'text-decoration:line-through;' : ''}">${escapeHtml(x.name)}</span><button onclick="unassignDay(${x.id})" title="${t('removeFromSchedule')}">✕</button>`;
+        itemsWrap.appendChild(div);
+      });
+    }
+    grid.appendChild(col);
+  });
+}
+window.unassignDay = function(id) {
+  const x = data.tasks.find(t => t.id === id);
+  if (x) x.day = null;
+  saveData(); renderAll();
+};
+document.getElementById('btnPrintPlan').onclick = () => printView('plan');
+
+/* ---------- Today's Plan ---------- */
+function renderTodayView() {
+  const todayIdx = new Date().getDay();
+  document.getElementById('todayTitle').textContent = `${t('todayTitlePrefix')} · ${dayNames()[todayIdx]}`;
+  const list = document.getElementById('todayTasksList');
+  const todaysTasks = data.tasks.filter(x => Number(x.day) === todayIdx);
+  list.innerHTML = todaysTasks.length ? '' : `<p class="empty-state">${t('emptyNoTasksToday')}</p>`;
+  todaysTasks.forEach(x => {
+    const div = document.createElement('div');
+    div.className = 'task-item';
+    div.innerHTML = `<span class="name" style="${x.done ? 'text-decoration: line-through; color:var(--text-muted);' : ''}">${escapeHtml(x.name)}</span>
+      <button class="btn sm" onclick="toggleTask(${x.id})">${x.done ? t('btnUndo') : t('btnDone')}</button>`;
+    list.appendChild(div);
+  });
+
+  const srList = document.getElementById('todaySRList');
+  const due = data.lessons.filter(l => l.nextReview <= todayISO());
+  srList.innerHTML = due.length ? '' : `<p class="empty-state">${t('emptyNoLessonsDueToday')}</p>`;
+  due.forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'sr-item';
+    row.innerHTML = `<div style="font-weight:600;">${escapeHtml(l.name)}</div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn sm success" onclick="reviewLesson(${l.id}, true)">${t('btnRemembered')}</button>
+        <button class="btn sm outline" onclick="reviewLesson(${l.id}, false)">${t('btnForgot')}</button>
+      </div>`;
+    srList.appendChild(row);
+  });
+}
+
+/* ---------- Focus Timer ---------- */
+let timerInterval = null;
+let secondsLeft = (data.settings.focusMin || 25) * 60;
+
+function formatTime(s) {
+  const m = Math.floor(s / 60), sec = s % 60;
+  return `${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+}
+document.getElementById('timerDisplay').textContent = formatTime(secondsLeft);
+
+document.getElementById('btnTimerStart').onclick = () => {
+  if (timerInterval) return;
+  timerInterval = setInterval(() => {
+    secondsLeft--;
+    document.getElementById('timerDisplay').textContent = formatTime(Math.max(secondsLeft,0));
+    if (secondsLeft <= 0) {
+      clearInterval(timerInterval); timerInterval = null;
+      data.focusLog.push({ date: new Date().toISOString() });
+      saveData();
+      showToast(t('focusSessionDone'));
+      renderDashboard();
+      secondsLeft = (data.settings.focusMin || 25) * 60;
+      document.getElementById('timerDisplay').textContent = formatTime(secondsLeft);
+    }
+  }, 1000);
+};
+document.getElementById('btnTimerPause').onclick = () => { clearInterval(timerInterval); timerInterval = null; };
+document.getElementById('btnTimerReset').onclick = () => {
+  clearInterval(timerInterval); timerInterval = null;
+  secondsLeft = (data.settings.focusMin || 25) * 60;
+  document.getElementById('timerDisplay').textContent = formatTime(secondsLeft);
+};
+
+/* ---------- Weekly Review ---------- */
+function renderReview() {
+  document.getElementById('reviewCompleted').textContent = data.tasks.filter(x => x.done).length;
+  document.getElementById('reviewPending').textContent = data.tasks.filter(x => !x.done).length;
+  document.getElementById('reviewFocus').textContent = data.focusLog.length;
+  document.getElementById('reviewLessons').textContent = data.lessons.reduce((sum,l) => sum + (l.reviewCount||0), 0);
+
+  const hist = document.getElementById('reviewHistory');
+  hist.innerHTML = '';
+  if (data.reviewNotes.length) {
+    const title = document.createElement('h3');
+    title.style.fontSize = '1rem';
+    title.textContent = t('pastNotesTitle');
+    hist.appendChild(title);
+    data.reviewNotes.slice().reverse().forEach(n => {
+      const div = document.createElement('div');
+      div.className = 'task-item';
+      div.style.alignItems = 'flex-start';
+      div.style.flexDirection = 'column';
+      div.innerHTML = `<div style="font-size:.75rem; color:var(--text-muted);">${formatDate(n.date)}</div><div>${escapeHtml(n.text)}</div>`;
+      hist.appendChild(div);
+    });
+  }
+}
+document.getElementById('btnSaveReview').onclick = () => {
+  const text = document.getElementById('reviewNoteInput').value.trim();
+  if (!text) { showToast(t('toastReviewNoteRequired')); return; }
+  data.reviewNotes.push({ date: todayISO(), text });
+  saveData();
+  document.getElementById('reviewNoteInput').value = '';
+  showToast(t('toastReviewSaved'));
+  renderReview();
+};
+
+/* ---------- Settings ---------- */
+document.getElementById('setFocusMin').value = data.settings.focusMin || 25;
+document.getElementById('btnSaveSettings').onclick = () => {
+  const val = Math.max(1, Number(document.getElementById('setFocusMin').value) || 25);
+  data.settings.focusMin = val;
+  saveData();
+  if (!timerInterval) {
+    secondsLeft = val * 60;
+    document.getElementById('timerDisplay').textContent = formatTime(secondsLeft);
+  }
+  showToast(t('toastSettingsSaved'));
+};
+
+document.getElementById('btnExportBackup').onclick = () => {
+  const str = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data));
+  const anchor = document.createElement('a');
+  anchor.setAttribute('href', str);
+  anchor.setAttribute('download', 'miora_bac_backup.json');
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+};
+
+document.getElementById('btnImportTrigger').onclick = () => document.getElementById('importFile').click();
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = evt => {
+    try {
+      const imported = JSON.parse(evt.target.result);
+      if (!imported.tasks) throw new Error('invalid');
+      data = imported;
+      if (!data.lessons) data.lessons = [];
+      if (!data.reviewNotes) data.reviewNotes = [];
+      if (!data.settings) data.settings = { focusMin: 25, darkTheme: false, lang: 'ar' };
+      if (!data.settings.lang) data.settings.lang = 'ar';
+      if (!data.nextLessonId) data.nextLessonId = 1;
+      saveData();
+      applyTheme(data.settings.darkTheme);
+      document.getElementById('setFocusMin').value = data.settings.focusMin || 25;
+      applyLanguage();
+      showToast(t('toastImportSuccess'));
+    } catch (err) {
+      showToast(t('toastImportError'));
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+document.getElementById('btnResetAll').onclick = () => {
+  if (confirm(t('confirmResetAll'))) {
+    localStorage.removeItem(STORAGE_KEY);
+    data = defaultData();
+    saveData();
+    applyLanguage();
+    showToast(t('toastDataReset'));
+  }
+};
+
+/* ---------- Print helper ---------- */
+function printView(viewId) {
+  const target = document.getElementById(`view-${viewId}`);
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('printing'));
+  target.classList.add('printing');
+  window.print();
+  setTimeout(() => target.classList.remove('printing'), 500);
+}
+
+/* ---------- Keyboard shortcuts ---------- */
+document.getElementById('fTaskName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btnSaveTask').click(); });
+document.getElementById('fLessonName').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btnSaveLesson').click(); });
+document.getElementById('fLessonSubject').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btnSaveLesson').click(); });
+
+/* ---------- PWA: Service Worker registration ---------- */
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => { /* silent: works fine without it too */ });
+  });
+}
+
+/* ---------- Init ---------- */
+applyLanguage();
+const initialDue = data.lessons.filter(l => l.nextReview <= todayISO()).length;
+if (initialDue > 0) {
+  setTimeout(() => showToast(dueBannerText(initialDue)), 600);
+}
+</script>
+</body>
+</html>
