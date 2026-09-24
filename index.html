@@ -315,7 +315,7 @@
 <!-- Task Modal -->
 <div class="modal-overlay hidden" id="taskModalOverlay">
   <div class="modal">
-    <h3 data-i18n="addTaskTitle"></h3>
+    <h3 data-i18n="addTaskTitle" id="taskModalTitle"></h3>
     <div class="form-group" style="margin-top:10px;">
       <label data-i18n="taskNameLabel"></label>
       <input type="text" id="fTaskName">
@@ -350,7 +350,7 @@
 <!-- Lesson Modal -->
 <div class="modal-overlay hidden" id="lessonModalOverlay">
   <div class="modal">
-    <h3 data-i18n="addLessonTitle"></h3>
+    <h3 data-i18n="addLessonTitle" id="lessonModalTitle"></h3>
     <div class="form-group" style="margin-top:10px;">
       <label data-i18n="lessonNameLabel"></label>
       <input type="text" id="fLessonName">
@@ -399,7 +399,7 @@ const I18N = {
     todayLessonsHeading: 'دروس للمراجعة اليوم', emptyNoLessonsDueToday: 'لا توجد دروس مستحقة اليوم 🎉',
     focusTitle: 'جلسة تركيز (بومودورو)', btnStart: 'بدء', btnPause: 'إيقاف مؤقت', btnReset: 'إعادة ضبط', focusSessionDone: '🎉 انتهت جلسة التركيز!',
     reviewTitle: 'المراجعة الأسبوعية', reviewHint: 'خصص بضع دقائق لتقييم أسبوعك.',
-    statCompletedTasks: 'مهام مكتملة', statPendingTasks: 'مهام معلقة', statLessonsReviewed: 'دروس رُوجعت',
+    statCompletedTasks: 'مهام مكتملة', statPendingTasks: 'المهام الحالية المعلقة', statLessonsReviewed: 'دروس رُوجعت',
     reviewNoteLabel: 'ملاحظات هذا الأسبوع (ما الذي نجح؟ ما الذي يجب تحسينه؟)', reviewNotePlaceholder: 'اكتب ملاحظاتك هنا...',
     btnSaveReview: 'حفظ ملاحظة الأسبوع', pastNotesTitle: 'ملاحظات سابقة',
     settingsTitle: 'إعدادات النظام والنسخ الاحتياطي', languageLabel: 'اللغة', focusDurationLabel: 'مدة جلسة التركيز (بالدقائق):',
@@ -407,11 +407,11 @@ const I18N = {
     addTaskTitle: 'إضافة مهمة جديدة', taskNameLabel: 'عنوان المهمة *', prioritiesLabel: 'الأولويات', important: 'هام', urgent: 'عاجل',
     dayLabel: 'يوم الجدول الأسبوعي (اختياري)', noDay: 'بدون تحديد',
     day0: 'الأحد', day1: 'الاثنين', day2: 'الثلاثاء', day3: 'الأربعاء', day4: 'الخميس', day5: 'الجمعة', day6: 'السبت',
-    btnCancel: 'إلغاء',
+    btnCancel: 'إلغاء', btnEdit: 'تعديل', editTaskTitle: 'تعديل المهمة', editLessonTitle: 'تعديل الدرس',
     addLessonTitle: 'إضافة درس للمراجعة المتباعدة', lessonNameLabel: 'اسم الدرس *', subjectLabel: 'المادة', subjectPlaceholder: 'مثال: الرياضيات',
     btnSaveTask: 'حفظ المهمة', btnSaveLesson: 'حفظ الدرس',
-    toastPriorityUpdated: '✓ تم تحديث أولوية المهمة', toastTaskNameRequired: 'يرجى إدخال عنوان المهمة', toastTaskAdded: '✓ تم إضافة المهمة',
-    toastLessonNameRequired: 'يرجى إدخال اسم الدرس', toastLessonAdded: '✓ تم إضافة الدرس',
+    toastPriorityUpdated: '✓ تم تحديث أولوية المهمة', toastTaskNameRequired: 'يرجى إدخال عنوان المهمة', toastTaskAdded: '✓ تم إضافة المهمة', toastTaskUpdated: '✓ تم تحديث المهمة',
+    toastLessonNameRequired: 'يرجى إدخال اسم الدرس', toastLessonAdded: '✓ تم إضافة الدرس', toastLessonUpdated: '✓ تم تحديث الدرس',
     toastNotifEnabled: '✓ تم تفعيل إشعارات المتصفح بنجاح', toastNotifDenied: '⚠️ تم رفض إذن الإشعارات من إعدادات المتصفح',
     notifExplainAlert: 'إشعارات المتصفح تعمل فقط عند فتح الموقع عبر الإنترنت (https) وليس عند فتح الملف مباشرة من جهازك.\n\nلا داعي للقلق: التطبيق يذكّرك تلقائياً بعدد الدروس المستحقة كل مرة تفتحه فيها، عبر الشارة الحمراء بجانب "التكرار المتباعد" وفي لوحة التحكم.',
     toastSettingsSaved: '✓ تم حفظ الإعدادات', toastImportSuccess: '✓ تم استيراد النسخة الاحتياطية بنجاح', toastImportError: '⚠️ ملف غير صالح',
@@ -444,7 +444,7 @@ const I18N = {
     todayLessonsHeading: 'Leçons à réviser aujourd\u2019hui', emptyNoLessonsDueToday: 'Aucune leçon à réviser aujourd\u2019hui 🎉',
     focusTitle: 'Session de concentration (Pomodoro)', btnStart: 'Démarrer', btnPause: 'Pause', btnReset: 'Réinitialiser', focusSessionDone: '🎉 Session de concentration terminée !',
     reviewTitle: 'Bilan hebdomadaire', reviewHint: 'Prends quelques minutes pour évaluer ta semaine.',
-    statCompletedTasks: 'Tâches terminées', statPendingTasks: 'Tâches en attente', statLessonsReviewed: 'Leçons révisées',
+    statCompletedTasks: 'Tâches terminées', statPendingTasks: 'Tâches actuellement en attente', statLessonsReviewed: 'Leçons révisées',
     reviewNoteLabel: 'Notes de la semaine (qu\u2019est-ce qui a marché ? à améliorer ?)', reviewNotePlaceholder: 'Écris tes notes ici...',
     btnSaveReview: 'Enregistrer la note', pastNotesTitle: 'Notes précédentes',
     settingsTitle: 'Paramètres et sauvegarde', languageLabel: 'Langue', focusDurationLabel: 'Durée de la session (en minutes) :',
@@ -452,11 +452,11 @@ const I18N = {
     addTaskTitle: 'Nouvelle tâche', taskNameLabel: 'Titre de la tâche *', prioritiesLabel: 'Priorités', important: 'Important', urgent: 'Urgent',
     dayLabel: 'Jour du planning (optionnel)', noDay: 'Non défini',
     day0: 'Dimanche', day1: 'Lundi', day2: 'Mardi', day3: 'Mercredi', day4: 'Jeudi', day5: 'Vendredi', day6: 'Samedi',
-    btnCancel: 'Annuler',
+    btnCancel: 'Annuler', btnEdit: 'Modifier', editTaskTitle: 'Modifier la tâche', editLessonTitle: 'Modifier la leçon',
     addLessonTitle: 'Nouvelle leçon (répétition espacée)', lessonNameLabel: 'Nom de la leçon *', subjectLabel: 'Matière', subjectPlaceholder: 'Ex. : Mathématiques',
     btnSaveTask: 'Enregistrer la tâche', btnSaveLesson: 'Enregistrer la leçon',
-    toastPriorityUpdated: '✓ Priorité mise à jour', toastTaskNameRequired: 'Merci de saisir un titre', toastTaskAdded: '✓ Tâche ajoutée',
-    toastLessonNameRequired: 'Merci de saisir un nom de leçon', toastLessonAdded: '✓ Leçon ajoutée',
+    toastPriorityUpdated: '✓ Priorité mise à jour', toastTaskNameRequired: 'Merci de saisir un titre', toastTaskAdded: '✓ Tâche ajoutée', toastTaskUpdated: '✓ Tâche mise à jour',
+    toastLessonNameRequired: 'Merci de saisir un nom de leçon', toastLessonAdded: '✓ Leçon ajoutée', toastLessonUpdated: '✓ Leçon mise à jour',
     toastNotifEnabled: '✓ Notifications activées', toastNotifDenied: '⚠️ Permission refusée',
     notifExplainAlert: 'Les notifications du navigateur ne fonctionnent que si le site est ouvert via Internet (https), pas en ouvrant le fichier directement depuis ton appareil.\n\nPas d\u2019inquiétude : l\u2019application te rappelle automatiquement le nombre de leçons dues à chaque ouverture, via le badge rouge près de « Répétition espacée » et sur le tableau de bord.',
     toastSettingsSaved: '✓ Paramètres enregistrés', toastImportSuccess: '✓ Sauvegarde importée avec succès', toastImportError: '⚠️ Fichier invalide',
@@ -489,7 +489,7 @@ const I18N = {
     todayLessonsHeading: 'Lessons to review today', emptyNoLessonsDueToday: 'No lessons due today 🎉',
     focusTitle: 'Focus Session (Pomodoro)', btnStart: 'Start', btnPause: 'Pause', btnReset: 'Reset', focusSessionDone: '🎉 Focus session complete!',
     reviewTitle: 'Weekly Review', reviewHint: 'Take a few minutes to reflect on your week.',
-    statCompletedTasks: 'Completed Tasks', statPendingTasks: 'Pending Tasks', statLessonsReviewed: 'Lessons Reviewed',
+    statCompletedTasks: 'Completed Tasks', statPendingTasks: 'Currently Pending Tasks', statLessonsReviewed: 'Lessons Reviewed',
     reviewNoteLabel: 'This week\u2019s notes (what worked? what to improve?)', reviewNotePlaceholder: 'Write your notes here...',
     btnSaveReview: 'Save Weekly Note', pastNotesTitle: 'Past Notes',
     settingsTitle: 'Settings & Backup', languageLabel: 'Language', focusDurationLabel: 'Focus session duration (minutes):',
@@ -497,11 +497,11 @@ const I18N = {
     addTaskTitle: 'Add New Task', taskNameLabel: 'Task title *', prioritiesLabel: 'Priorities', important: 'Important', urgent: 'Urgent',
     dayLabel: 'Weekly schedule day (optional)', noDay: 'None',
     day0: 'Sunday', day1: 'Monday', day2: 'Tuesday', day3: 'Wednesday', day4: 'Thursday', day5: 'Friday', day6: 'Saturday',
-    btnCancel: 'Cancel',
+    btnCancel: 'Cancel', btnEdit: 'Edit', editTaskTitle: 'Edit Task', editLessonTitle: 'Edit Lesson',
     addLessonTitle: 'Add Lesson (Spaced Repetition)', lessonNameLabel: 'Lesson name *', subjectLabel: 'Subject', subjectPlaceholder: 'e.g. Mathematics',
     btnSaveTask: 'Save Task', btnSaveLesson: 'Save Lesson',
-    toastPriorityUpdated: '✓ Task priority updated', toastTaskNameRequired: 'Please enter a task title', toastTaskAdded: '✓ Task added',
-    toastLessonNameRequired: 'Please enter a lesson name', toastLessonAdded: '✓ Lesson added',
+    toastPriorityUpdated: '✓ Task priority updated', toastTaskNameRequired: 'Please enter a task title', toastTaskAdded: '✓ Task added', toastTaskUpdated: '✓ Task updated',
+    toastLessonNameRequired: 'Please enter a lesson name', toastLessonAdded: '✓ Lesson added', toastLessonUpdated: '✓ Lesson updated',
     toastNotifEnabled: '✓ Browser notifications enabled', toastNotifDenied: '⚠️ Notification permission denied',
     notifExplainAlert: 'Browser notifications only work when the site is opened online (https), not when opening the file directly from your device.\n\nNo worries: the app automatically reminds you of due lessons every time you open it, via the red badge next to "Spaced Repetition" and on the dashboard.',
     toastSettingsSaved: '✓ Settings saved', toastImportSuccess: '✓ Backup imported successfully', toastImportError: '⚠️ Invalid file',
@@ -546,6 +546,7 @@ const defaultData = () => ({
   lessons: [],
   focusLog: [],
   reviewNotes: [],
+  reviewLog: [],
   settings: { focusMin: 25, darkTheme: false, lang: 'ar' },
   nextId: 1,
   nextLessonId: 1
@@ -558,12 +559,27 @@ try {
 // Migration safety for older backups
 if (!data.lessons) data.lessons = [];
 if (!data.reviewNotes) data.reviewNotes = [];
+if (!data.reviewLog) data.reviewLog = [];
 if (!data.settings) data.settings = { focusMin: 25, darkTheme: false, lang: 'ar' };
 if (!data.settings.lang) data.settings.lang = 'ar';
 if (!data.nextLessonId) data.nextLessonId = 1;
+if (!data.nextId) data.nextId = 1;
 
 function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
-function todayISO() { return new Date().toISOString().slice(0,10); }
+function toLocalDateStr(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+function todayISO() { return toLocalDateStr(new Date()); }
+function isWithinLastDays(dateInput, days) {
+  if (!dateInput) return false;
+  const d = new Date(dateInput);
+  if (isNaN(d.getTime())) return false;
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  return d.getTime() >= cutoff;
+}
 
 function showToast(msg) {
   const el = document.getElementById('toast');
@@ -719,6 +735,7 @@ function renderTasks() {
       <span class="name" style="${x.done ? 'text-decoration: line-through; color:var(--text-muted);' : ''}">${escapeHtml(x.name)}${x.day !== '' && x.day !== undefined && x.day !== null ? ` <span style="color:var(--text-muted); font-size:.75rem;">(${names[x.day]})</span>` : ''}</span>
       <div style="display:flex; gap:6px; flex-shrink:0;">
         <button class="btn sm" onclick="toggleTask(${x.id})">${x.done ? t('btnUndo') : t('btnDone')}</button>
+        <button class="btn sm outline" onclick="editTask(${x.id})">${t('btnEdit')}</button>
         <button class="btn sm danger" onclick="deleteTask(${x.id})">${t('btnDelete')}</button>
       </div>`;
     wrap.appendChild(div);
@@ -737,7 +754,10 @@ document.querySelectorAll('#taskFilterChips .chip').forEach(chip => {
 
 window.toggleTask = function(id) {
   const x = data.tasks.find(t => t.id === id);
-  if (x) x.done = !x.done;
+  if (x) {
+    x.done = !x.done;
+    x.completedAt = x.done ? new Date().toISOString() : null;
+  }
   saveData(); renderAll();
 };
 window.deleteTask = function(id) {
@@ -748,21 +768,65 @@ window.deleteTask = function(id) {
 
 /* ---------- Task Modal ---------- */
 const taskModal = document.getElementById('taskModalOverlay');
-document.getElementById('btnAddTaskList').onclick = () => taskModal.classList.remove('hidden');
-document.getElementById('btnCancelTask').onclick = () => taskModal.classList.add('hidden');
+let editingTaskId = null;
+
+function resetTaskForm() {
+  document.getElementById('fTaskName').value = '';
+  document.getElementById('fImportant').checked = false;
+  document.getElementById('fUrgent').checked = false;
+  document.getElementById('fDay').value = '';
+}
+
+function openAddTaskModal() {
+  editingTaskId = null;
+  document.getElementById('taskModalTitle').textContent = t('addTaskTitle');
+  resetTaskForm();
+  taskModal.classList.remove('hidden');
+}
+
+window.editTask = function(id) {
+  const x = data.tasks.find(t => t.id === id);
+  if (!x) return;
+  editingTaskId = id;
+  document.getElementById('taskModalTitle').textContent = t('editTaskTitle');
+  document.getElementById('fTaskName').value = x.name;
+  document.getElementById('fImportant').checked = !!x.important;
+  document.getElementById('fUrgent').checked = !!x.urgent;
+  document.getElementById('fDay').value = (x.day === null || x.day === undefined) ? '' : String(x.day);
+  taskModal.classList.remove('hidden');
+};
+
+document.getElementById('btnAddTaskList').onclick = openAddTaskModal;
+document.getElementById('btnCancelTask').onclick = () => { taskModal.classList.add('hidden'); editingTaskId = null; };
 document.getElementById('btnSaveTask').onclick = () => {
   const name = document.getElementById('fTaskName').value.trim();
   if (!name) { showToast(t('toastTaskNameRequired')); return; }
   const important = document.getElementById('fImportant').checked;
   const urgent = document.getElementById('fUrgent').checked;
   const dayVal = document.getElementById('fDay').value;
-  data.tasks.push({ id: data.nextId++, name, important, urgent, done: false, day: dayVal === '' ? null : Number(dayVal), createdAt: new Date().toISOString() });
+  const dayNum = dayVal === '' ? null : Number(dayVal);
+
+  if (editingTaskId !== null) {
+    const x = data.tasks.find(t => t.id === editingTaskId);
+    if (x) {
+      x.name = name;
+      x.important = important;
+      x.urgent = urgent;
+      x.day = dayNum;
+    }
+    editingTaskId = null;
+    saveData();
+    taskModal.classList.add('hidden');
+    resetTaskForm();
+    showToast(t('toastTaskUpdated'));
+    renderAll();
+    return;
+  }
+
+  data.tasks.push({ id: data.nextId++, name, important, urgent, done: false, day: dayNum, createdAt: new Date().toISOString(), completedAt: null });
   saveData();
   taskModal.classList.add('hidden');
-  document.getElementById('fTaskName').value = '';
-  document.getElementById('fImportant').checked = false;
-  document.getElementById('fUrgent').checked = false;
-  document.getElementById('fDay').value = '';
+  resetTaskForm();
   showToast(t('toastTaskAdded'));
   renderAll();
 };
@@ -784,8 +848,9 @@ function renderSpacedRepetition() {
           <div style="font-weight:600;">${escapeHtml(l.name)}</div>
           <div style="font-size:.8rem; color:var(--text-muted);">${l.subject ? escapeHtml(l.subject) + ' · ' : ''}<span class="sr-badge ${due ? 'due' : ''}">${due ? t('dueToday') : t('reviewDatePrefix') + formatDate(l.nextReview)}</span></div>
         </div>
-        <div style="display:flex; gap:6px;">
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
           ${due ? `<button class="btn sm success" onclick="reviewLesson(${l.id}, true)">${t('btnRemembered')}</button><button class="btn sm outline" onclick="reviewLesson(${l.id}, false)">${t('btnForgot')}</button>` : ''}
+          <button class="btn sm outline" onclick="editLesson(${l.id})">${t('btnEdit')}</button>
           <button class="btn sm danger" onclick="deleteLesson(${l.id})">${t('btnDelete')}</button>
         </div>`;
       container.appendChild(row);
@@ -803,9 +868,10 @@ window.reviewLesson = function(id, remembered) {
   const interval = SR_INTERVALS[l.intervalIndex];
   const next = new Date();
   next.setDate(next.getDate() + interval);
-  l.nextReview = next.toISOString().slice(0,10);
+  l.nextReview = toLocalDateStr(next);
   l.lastReviewed = todayISO();
   l.reviewCount = (l.reviewCount || 0) + 1;
+  data.reviewLog.push({ date: new Date().toISOString(), lessonId: id });
   saveData();
   showToast(remembered ? reminderIntervalText(interval) : reviewTomorrowText());
   renderAll();
@@ -817,19 +883,58 @@ window.deleteLesson = function(id) {
 };
 
 const lessonModal = document.getElementById('lessonModalOverlay');
-document.getElementById('btnAddLesson').onclick = () => lessonModal.classList.remove('hidden');
-document.getElementById('btnCancelLesson').onclick = () => lessonModal.classList.add('hidden');
+let editingLessonId = null;
+
+function resetLessonForm() {
+  document.getElementById('fLessonName').value = '';
+  document.getElementById('fLessonSubject').value = '';
+}
+
+function openAddLessonModal() {
+  editingLessonId = null;
+  document.getElementById('lessonModalTitle').textContent = t('addLessonTitle');
+  resetLessonForm();
+  lessonModal.classList.remove('hidden');
+}
+
+window.editLesson = function(id) {
+  const l = data.lessons.find(x => x.id === id);
+  if (!l) return;
+  editingLessonId = id;
+  document.getElementById('lessonModalTitle').textContent = t('editLessonTitle');
+  document.getElementById('fLessonName').value = l.name;
+  document.getElementById('fLessonSubject').value = l.subject || '';
+  lessonModal.classList.remove('hidden');
+};
+
+document.getElementById('btnAddLesson').onclick = openAddLessonModal;
+document.getElementById('btnCancelLesson').onclick = () => { lessonModal.classList.add('hidden'); editingLessonId = null; };
 document.getElementById('btnSaveLesson').onclick = () => {
   const name = document.getElementById('fLessonName').value.trim();
   if (!name) { showToast(t('toastLessonNameRequired')); return; }
   const subject = document.getElementById('fLessonSubject').value.trim();
+
+  if (editingLessonId !== null) {
+    const l = data.lessons.find(x => x.id === editingLessonId);
+    if (l) {
+      l.name = name;
+      l.subject = subject;
+    }
+    editingLessonId = null;
+    saveData();
+    lessonModal.classList.add('hidden');
+    resetLessonForm();
+    showToast(t('toastLessonUpdated'));
+    renderAll();
+    return;
+  }
+
   const next = new Date();
   next.setDate(next.getDate() + SR_INTERVALS[0]);
-  data.lessons.push({ id: data.nextLessonId++, name, subject, intervalIndex: 0, nextReview: next.toISOString().slice(0,10), lastReviewed: null, reviewCount: 0 });
+  data.lessons.push({ id: data.nextLessonId++, name, subject, intervalIndex: 0, nextReview: toLocalDateStr(next), lastReviewed: null, reviewCount: 0 });
   saveData();
   lessonModal.classList.add('hidden');
-  document.getElementById('fLessonName').value = '';
-  document.getElementById('fLessonSubject').value = '';
+  resetLessonForm();
   showToast(t('toastLessonAdded'));
   renderAll();
 };
@@ -944,11 +1049,16 @@ document.getElementById('btnTimerReset').onclick = () => {
 };
 
 /* ---------- Weekly Review ---------- */
+const REVIEW_WINDOW_DAYS = 7;
 function renderReview() {
-  document.getElementById('reviewCompleted').textContent = data.tasks.filter(x => x.done).length;
+  const completedRecent = data.tasks.filter(x => x.done && isWithinLastDays(x.completedAt, REVIEW_WINDOW_DAYS)).length;
+  const focusRecent = data.focusLog.filter(f => isWithinLastDays(f.date, REVIEW_WINDOW_DAYS)).length;
+  const reviewsRecent = (data.reviewLog || []).filter(r => isWithinLastDays(r.date, REVIEW_WINDOW_DAYS)).length;
+
+  document.getElementById('reviewCompleted').textContent = completedRecent;
   document.getElementById('reviewPending').textContent = data.tasks.filter(x => !x.done).length;
-  document.getElementById('reviewFocus').textContent = data.focusLog.length;
-  document.getElementById('reviewLessons').textContent = data.lessons.reduce((sum,l) => sum + (l.reviewCount||0), 0);
+  document.getElementById('reviewFocus').textContent = focusRecent;
+  document.getElementById('reviewLessons').textContent = reviewsRecent;
 
   const hist = document.getElementById('reviewHistory');
   hist.innerHTML = '';
@@ -1012,9 +1122,11 @@ document.getElementById('importFile').addEventListener('change', e => {
       data = imported;
       if (!data.lessons) data.lessons = [];
       if (!data.reviewNotes) data.reviewNotes = [];
+      if (!data.reviewLog) data.reviewLog = [];
       if (!data.settings) data.settings = { focusMin: 25, darkTheme: false, lang: 'ar' };
       if (!data.settings.lang) data.settings.lang = 'ar';
       if (!data.nextLessonId) data.nextLessonId = 1;
+      if (!data.nextId) data.nextId = 1;
       saveData();
       applyTheme(data.settings.darkTheme);
       document.getElementById('setFocusMin').value = data.settings.focusMin || 25;
